@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
 
-namespace QuiApp.Models
+namespace QuizApp.Models
 {
 
     public class User
@@ -9,7 +7,7 @@ namespace QuiApp.Models
         public int Id { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
-        public List<Quiz> CreatedQuizzes { get; set; }
-        public List<Score> Scores { get; set; }
+        public List<Quiz> CreatedQuizzes { get; set; } = new List<Quiz>();
+        public List<Score> Scores { get; set; } = new List<Score>();
     }
 }

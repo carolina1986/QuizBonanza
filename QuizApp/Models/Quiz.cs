@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using QuiApp.Models;
 
 namespace QuizApp.Models
 {
