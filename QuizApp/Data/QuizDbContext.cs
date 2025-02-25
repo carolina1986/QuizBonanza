@@ -36,6 +36,10 @@ namespace QuizApp.Data
         // modelBuilder is an instance of the ModelBuilder class
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // HasOne() defines a one-to-many relationship from the perspective of the "one" side
+            // WithMany() defines a one-to-many relationship from the perspective of the "many" side
+            // HasForeignKey() specifies which column will store the foreign key in the "many" side, it links the two tables together
+
             // Configure the relationship between the Quiz and User
             modelBuilder.Entity<Quiz>()
                 .HasOne(q => q.Creator) // A quiz has one creator
