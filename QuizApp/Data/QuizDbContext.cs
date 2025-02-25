@@ -1,25 +1,39 @@
+// When running the application his code takes care of all the database operations
+// It sets up the tables in the database and configures the relationships between the tables
+// It also configures the connection to the database
+
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Models;
 
 namespace QuizApp.Data 
 {
-    // ': DbContext' means that QuizDbContext inherits from DbContext
-    public class QuizDbContext : DbContext
+    public class QuizDbContext : DbContext // 'DbContext' is a class in Entity Framework Core that represents a session with the database
     {
-        // 'DbSet<T>' is a collection of entities of type 'T' in the context
+        // Sets up the tables in the database
+        // Each DbSet represents a table in the database
+        // By using get; + set; we can read and write to the tables
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Option> Options { get; set; }
         public DbSet <Score> Scores { get; set; }
 
-        // Configures the context to connect to the database
+        // Configures the connection to the database
+        // using protected so that only classes that inherit from QuizDbContext can access this method
+        // usin override so that we can override the method in the base class
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Connection string for the database
-            optionsBuilder.UseNpgsql("Host=localhost;Database=quizdb;Username=quizuser;Password=password123");
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
+        // OnModelCreating is a method that is called when the database is being created
+        // it allows us to configure the database and set up the relationships between the tables
+        // Using protected so that only classes that inherit from QuizDbContext can access this method
+        // Usin override so that we can override the method in the base class 
+        // (DbContext class in this case, because we are inheriting from it and it has the OnModelCreating method)  
+        // ModelBuilder is a EF class that configures the database and the relationships between the tables
+        // modelBuilder is an instance of the ModelBuilder class
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure the relationship between the Quiz and User

@@ -1,0 +1,28 @@
+# This file tells Docker how to build and run the application.
+# It specifies the services that make up the application, and how they interact.
+
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: "Host=quiz-postgres;Database=quizdb;Username=quizuser;Password=password123"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - quiz-postgres
+
+  quiz-postgres:
+    image: postgres:latest
+    container_name: quiz-postgres
+    environment:
+      POSTGRES_DB: quizdb
+      POSTGRES_USER: quizuser
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - quiz_data:/var/lib/postgresql/data
+
+volumes:
+  quiz_data:
