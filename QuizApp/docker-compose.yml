@@ -1,12 +1,13 @@
 # This file tells Docker how to build and run the application.
 # It specifies the services that make up the application, and how they interact.
 
+
 version: '3'
 services:
   app:
     build: .
     environment:
-      DATABASE_URL: "Host=quiz-postgres;Database=quizdb;Username=quizuser;Password=password123"
+      - DATABASE_URL=${DATABASE_URL}
     ports:
       - "5000:5000"
     depends_on:
@@ -15,10 +16,8 @@ services:
   quiz-postgres:
     image: postgres:latest
     container_name: quiz-postgres
-    environment:
-      POSTGRES_DB: quizdb
-      POSTGRES_USER: quizuser
-      POSTGRES_PASSWORD: password123
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
