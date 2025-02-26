@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace QuizzApp.Repositories
+namespace QuizApp.Repositories
 {
 
     // 'where T : class' constrains the generic type T to reference (class) types only 
