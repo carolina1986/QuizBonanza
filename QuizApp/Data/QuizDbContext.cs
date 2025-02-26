@@ -18,10 +18,9 @@ namespace QuizApp.Data
         public DbSet<Option> Options { get; set; }
         public DbSet <Score> Scores { get; set; }
 
-        // This is the constructor for the QuizDbContext class
-        // it contains the 
+        // This method is called when the database is being configured, it is:
         // using protected so that only classes that inherit from QuizDbContext can access this method
-        // usin override so that we can override the method in the base class
+        // usin override so that we can override the method in the base class 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
