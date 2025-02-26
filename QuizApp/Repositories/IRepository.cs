@@ -1,5 +1,5 @@
 // This interface is used to define the generic repository pattern.
-// It contains the basic CRUD operations that are used in the repository pattern.
+// It contains the basic CRUD operations (just the method signatures without the implementation).
 // The repository pattern is used to separate the data access logic from the business logic.
 
 using System;
