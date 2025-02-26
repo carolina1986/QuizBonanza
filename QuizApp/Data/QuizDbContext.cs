@@ -1,4 +1,4 @@
-// When running the application his code takes care of all the database operations
+// When running the application this code takes care of all the database operations
 // It sets up the tables in the database and configures the relationships between the tables
 // It also configures the connection to the database
 
@@ -18,7 +18,8 @@ namespace QuizApp.Data
         public DbSet<Option> Options { get; set; }
         public DbSet <Score> Scores { get; set; }
 
-        // Configures the connection to the database
+        // This is the constructor for the QuizDbContext class
+        // it contains the 
         // using protected so that only classes that inherit from QuizDbContext can access this method
         // usin override so that we can override the method in the base class
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
