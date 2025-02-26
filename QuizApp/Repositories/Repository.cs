@@ -23,7 +23,7 @@ namespace QuizApp.Repositories
         }
         
         // The following methods are the implementation of the IRepository interface methods
-        // This method will return a single entity with the given id (e.g. a single user with the given id)
+        // This first method will return a single entity with the given id (e.g. a single user with the given id)
         public T GetById(int id)
         {
             return _dbSet.Find(id);
