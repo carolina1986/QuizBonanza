@@ -20,9 +20,14 @@ namespace QuizApp.Repositories
         // 'u => u.Username == username' is a lambda expression (arrow function) 
         // it sends the statement to the FirstOrDefault method
         // can be translated to: "for each user (u), check if the user's username (u.Username) is equal to the given username (username)"
-        public User GetByUsername(string username)
+        public User GetUserByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
+        }
+
+        public User GetUserById(int id)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == id);
         }
     }
 }
