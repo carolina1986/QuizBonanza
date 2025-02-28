@@ -5,6 +5,7 @@ namespace QuizApp.Repositories
     public interface IUserRepository : IRepository<User>
     {
         // This method (only signature) is here because it is specific to the User entity
-        User GetByUsername(string username);
+        User GetUserByUsername(string username);
+        User GetUserById(int id);
     }
 }
