@@ -27,5 +27,12 @@ namespace QuizApp.Repositories
                 .ThenInclude(q => q.Options) // This will include the options for each question
                 .FirstOrDefault(q => q.Id == quizId);
         }
+
+        public IEnumerable<Quiz> GetQuizzesByCreator(int creatorId)
+        {
+            return _context.Quizzes
+                .Where(q => q.CreatorId == creatorId)
+                .ToList();
+        }
     }
 }
