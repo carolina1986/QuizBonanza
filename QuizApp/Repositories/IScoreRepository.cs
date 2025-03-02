@@ -11,5 +11,7 @@ namespace QuizApp.Repositories
         IEnumerable<Score> GetLeaderboardForUser(int userId);
         IEnumerable<Score> GetAllScoresForUser(int userId);
         Score GetScoreForUserInQuiz(int userId, int quizId);
+        Score GetHighestScoreForUserInQuiz(int userId, int quizId);
+
     }
 }
