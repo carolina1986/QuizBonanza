@@ -1,4 +1,5 @@
 using System;
+using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
 using QuizApp.Models;
@@ -51,6 +52,18 @@ namespace QuizApp.Services
         public User GetUserById(int id)
         {
             return _userRepository.GetById(id); // Get the user by id using the GetById method from the IUserRepository.            
+        }
+
+        public User GetUserByUsername(string username)
+        {
+            return _userRepository.GetUserByUsername(username); 
+        }
+
+        public User UpdateUser(User user)
+        {
+            _userRepository.Update(user); // Update the user using the Update method from the IUserRepository.
+            _userRepository.SaveChanges(); // Save the changes to the database.
+            return user; // Return the updated user.
         }
 
         private string HashPassword(string password)

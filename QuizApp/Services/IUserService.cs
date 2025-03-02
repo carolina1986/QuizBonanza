@@ -7,5 +7,7 @@ namespace QuizApp.Services
         bool RegisterUser(string username, string password);
         User AuthenticateUser(string username, string password);
         User GetUserById(int id);
+        User GetUserByUsername(string username);
+        User UpdateUser(User user);
     }
 }
