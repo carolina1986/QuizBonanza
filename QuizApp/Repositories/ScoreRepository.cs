@@ -101,7 +101,14 @@ namespace QuizApp.Repositories
                 .FirstOrDefault(s => s.UserId == userId && s.QuizId == quizId);
         }
 
-
-
+        public Score GetHighestScoreForUserInQuiz(int userId, int quizId)
+        {
+            return _context.Scores
+                .Include(s => s.User)
+                .Include(s => s.Quiz)
+                .Where(s => s.UserId == userId && s.QuizId == quizId)
+                .OrderByDescending(s => s.Points)
+                .FirstOrDefault();
+        }
     }
 }
