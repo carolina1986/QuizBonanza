@@ -6,6 +6,5 @@ namespace QuizApp.Repositories
     {
         // This method (only signature) is here because it is specific to the User entity
         User GetUserByUsername(string username);
-        User GetUserById(int id);
     }
 }

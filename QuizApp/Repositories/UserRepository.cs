@@ -24,10 +24,5 @@ namespace QuizApp.Repositories
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }
-
-        public User GetUserById(int id)
-        {
-            return _context.Users.FirstOrDefault(u => u.Id == id);
-        }
     }
 }
