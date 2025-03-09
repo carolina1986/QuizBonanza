@@ -1,7 +1,9 @@
-﻿using QuizApp.Commands;
+﻿using Microsoft.Extensions.Configuration;
+using QuizApp.Commands;
 using QuizApp.Data;
 using QuizApp.Repositories;
 using QuizApp.Services;
+using System.IO;
 
 namespace QuizApp
 {
@@ -12,15 +14,26 @@ namespace QuizApp
             Console.Clear();
             Console.WriteLine("Loading...");
 
+            // Konfigurera applikationen för att ladda miljövariabler
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            // Skriv ut konfigurationen för felsökning
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ?? 
+                                  configuration["DATABASE_URL"];
+
             // Initialize database
-            using (var db = new QuizDbContext())
+            using (var db = new QuizDbContext(configuration))
             {
                 Console.WriteLine("Setting up the database...");
                 db.Database.EnsureCreated();
             }
 
             // Set up dependency injection
-            var context = new QuizDbContext();
+            var context = new QuizDbContext(configuration);
 
             // Repositories
             var userRepository = new UserRepository(context);
@@ -29,7 +42,6 @@ namespace QuizApp
             var optionRepository = new OptionRepository(context);
             var scoreRepository = new ScoreRepository(context);
 
-
             // Services
             var userService = new UserService(userRepository);
             var quizService = new QuizService(quizRepository, userRepository);
@@ -37,7 +49,6 @@ namespace QuizApp
             var scoreService = new ScoreService(scoreRepository, quizRepository, userRepository);
             var sessionService = new SessionService();
             
-
             // Command handler
             var commandHandler = new CommandHandler();
             commandHandler.CommandRegistration(new RegisterCommand(userService, sessionService));
@@ -67,7 +78,6 @@ namespace QuizApp
             bool running = true;
             while (running)
             {
-                
                 Console.Write("> ");
                 string? input = Console.ReadLine();
 
