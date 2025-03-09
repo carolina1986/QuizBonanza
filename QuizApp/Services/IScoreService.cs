@@ -10,6 +10,6 @@ namespace QuizApp.Services
        IEnumerable<Score> GetGlobalLeaderboard();
        IEnumerable<Score> GetLeaderboardForOneQuiz(int quizId);
        IEnumerable<Score> GetLeaderboardForOneUser(int userId);
-       Score GetHighestScoreForUserInQuiz(int userId, int quizId);
+       Score? GetHighestScoreForUserInQuiz(int userId, int quizId);
     }
 }

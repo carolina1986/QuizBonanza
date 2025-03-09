@@ -1,5 +1,3 @@
-using System;
-using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
 using QuizApp.Models;
@@ -37,7 +35,7 @@ namespace QuizApp.Services
             return true; // Return true if the user was successfully registered.
         }
 
-        public User AuthenticateUser(string username, string password)
+        public User? AuthenticateUser(string username, string password)
         {
             var user = _userRepository.GetUserByUsername(username); 
            
@@ -49,12 +47,12 @@ namespace QuizApp.Services
             return user; // If the authentication is successful, return the user.
         }
 
-        public User GetUserById(int id)
+        public User? GetUserById(int id)
         {
             return _userRepository.GetById(id); // Get the user by id using the GetById method from the IUserRepository.            
         }
 
-        public User GetUserByUsername(string username)
+        public User? GetUserByUsername(string username)
         {
             return _userRepository.GetUserByUsername(username); 
         }
