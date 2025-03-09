@@ -21,8 +21,8 @@ namespace QuizApp.Services
 
         public Score SaveScore (int userId, int quizId, int points)
         {
-            User user = _userRepository.GetById(userId);
-            Quiz quiz = _quizRepository.GetById(quizId);
+            User? user = _userRepository.GetById(userId);
+            Quiz? quiz = _quizRepository.GetQuizWithQuestionsAndOptions(quizId);
 
             if (user == null || quiz == null)
             {
@@ -39,7 +39,7 @@ namespace QuizApp.Services
 
         public IEnumerable<Score> GetLeaderboardForOneQuiz(int quizId)
         {
-            Quiz quiz = _quizRepository.GetById(quizId);
+            Quiz? quiz = _quizRepository.GetQuizWithQuestionsAndOptions(quizId);
             if (quiz == null)
             {
                 throw new Exception("Quiz not found");
@@ -49,7 +49,7 @@ namespace QuizApp.Services
 
         public IEnumerable<Score> GetLeaderboardForOneUser(int userId)
         {
-            User user = _userRepository.GetById(userId);
+            User? user = _userRepository.GetById(userId);
             if (user == null)
             {
                 throw new Exception("User not found");
@@ -58,10 +58,9 @@ namespace QuizApp.Services
             return _scoreRepository.GetLeaderboardForUser(userId);
         }
 
-        public Score GetHighestScoreForUserInQuiz(int userId, int quizId)
+        public Score? GetHighestScoreForUserInQuiz(int userId, int quizId)
         {
             return _scoreRepository.GetHighestScoreForUserInQuiz(userId, quizId);
         }
-
     }
 }

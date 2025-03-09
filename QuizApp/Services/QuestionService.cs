@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic;
 using QuizApp.Models;
 using QuizApp.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizApp.Services
 {
+
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
@@ -22,11 +19,11 @@ namespace QuizApp.Services
             _questionRepository = questionRepository;
             _optionRepository = optionRepository;
             _quizRepository = quizRepository;
-        }   
+        }
 
         public Question AddQuestionWithOptionsToQuiz(int quizId, string questionText, List<Option> options)
         {
-            Quiz quiz = _quizRepository.GetById(quizId);
+            Quiz? quiz = _quizRepository.GetById(quizId);
             if (quiz == null)
             {
                 throw new Exception("Quiz not found");
@@ -42,11 +39,7 @@ namespace QuizApp.Services
             _questionRepository.Add(question);
             _questionRepository.SaveChanges();
 
-            // OBS! We need to save the new question first before we can add options to it
-            // This is because the options need the question's id as a foreign key
-            // The new question will get an id first when it is added (saved) to the database
-
-            if (options != null && options.Any()) // If Any()returns false, the foreach loop will not run
+            if (options != null && options.Any())
             {
                 foreach (Option option in options)
                 {
@@ -58,14 +51,17 @@ namespace QuizApp.Services
             return question;
         }
 
-        public Question GetQuestionById(int id)
+        public Question? GetQuestionById(int id)
         {
             return _questionRepository.GetById(id);
         }
 
         public IEnumerable<Question> GetQuestionsByQuiz(int quizId)
         {
-            return _questionRepository.Find(q => q.QuizId == quizId); 
+            return _questionRepository
+                .Find(q => q.QuizId == quizId)
+                .Include(q => q.Options) // Ensure options are loaded
+                .ToList();
         }
 
         public void UpdateQuestion(Question question)
@@ -76,7 +72,7 @@ namespace QuizApp.Services
 
         public void UpdateQuestionText(int questionId, string newQuestionText)
         {
-            Question question = _questionRepository.GetById(questionId);
+            Question? question = _questionRepository.GetById(questionId);
             if (question == null)
             {
                 throw new Exception("Question not found");
@@ -89,7 +85,7 @@ namespace QuizApp.Services
 
         public void DeleteQuestion(int questionId)
         {
-            Question question = _questionRepository.GetById(questionId);
+            Question? question = _questionRepository.GetById(questionId);
             if (question == null)
             {
                 throw new Exception("Question not found");
@@ -106,9 +102,9 @@ namespace QuizApp.Services
             _questionRepository.SaveChanges();
         }
 
-        public Option AddOptionToQuestion(int questionId, string optionText,bool isCorrect)
+        public Option AddOptionToQuestion(int questionId, string optionText, bool isCorrect)
         {
-            Question question = _questionRepository.GetById(questionId);    
+            Question? question = _questionRepository.GetById(questionId);
             if (question == null)
             {
                 throw new Exception("Question not found");
@@ -127,14 +123,14 @@ namespace QuizApp.Services
             return option;
         }
 
-        public Option GetOptionById(int optionId)
+        public Option? GetOptionById(int optionId)
         {
             return _optionRepository.GetById(optionId);
         }
 
         public void UpdateOption(int optionId, string optionText, bool isCorrect)
         {
-            Option option = _optionRepository.GetById(optionId);
+            Option? option = _optionRepository.GetById(optionId);
             if (option == null)
             {
                 throw new Exception("Option not found");
@@ -149,7 +145,7 @@ namespace QuizApp.Services
 
         public void DeleteOption(int optionId)
         {
-            Option option = _optionRepository.GetById(optionId);
+            Option? option = _optionRepository.GetById(optionId);
             if (option == null)
             {
                 throw new Exception("Option not found");

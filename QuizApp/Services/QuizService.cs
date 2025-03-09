@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using QuizApp.Models;
 using QuizApp.Repositories;
 
@@ -22,7 +19,7 @@ namespace QuizApp.Services
             var creator = _userRepository.GetById(CreatorId);
             if (creator == null)
             {
-                throw new Exception("User not found"); // Using 'throw new Exception' to end the method and return an error message.
+                throw new Exception("User not found");
             }
 
             var quiz = new Quiz
@@ -30,22 +27,35 @@ namespace QuizApp.Services
                 Title = title,
                 Description = description,
                 CreatorId = CreatorId,
-                Questions = questions ?? new List<Question>()
             };
 
-            _quizRepository.Add(quiz);
+            _quizRepository.Add(quiz); //LAGT TILL
+            _quizRepository.SaveChanges(); //LAGT TILL
+
+            if (questions != null)
+            {
+                foreach (var question in questions)
+                {
+                    question.QuizId = quiz.Id; // Sätt rätt quiz-ID för varje fråga
+                }
+
+                quiz.Questions = questions;
+            }
+
             _quizRepository.SaveChanges();
+
             return quiz;
         }
 
-        public Quiz GetQuizById(int id)
+
+        public Quiz? GetQuizById(int id)
         {
-            return _quizRepository.GetById(id);
+            return _quizRepository.GetQuizWithQuestionsAndOptions(id);
         }
 
         public IEnumerable<Quiz> GetAllQuizzes()
         {
-            return _quizRepository.GetAll(); // ToList()?
+            return _quizRepository.GetAll(); 
         }
 
         public IEnumerable<Quiz> GetQuizzesByCreator(int creatorId)
@@ -62,7 +72,7 @@ namespace QuizApp.Services
 
         public void RemoveQuiz(int id)
         {
-            var quiz = _quizRepository.GetById(id);
+            var quiz = _quizRepository.GetQuizWithQuestionsAndOptions(id);
             if (quiz == null)
             {
                 throw new ArgumentException("Quiz not found");
