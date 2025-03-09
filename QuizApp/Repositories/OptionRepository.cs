@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using QuizApp.Models;
 using QuizApp.Data;
-using System.Runtime.CompilerServices;
 
 namespace QuizApp.Repositories
 {
@@ -21,14 +16,14 @@ namespace QuizApp.Repositories
                 .ToList(); // "Return the list of options that have the same questionId"
         }
 
-        public Option GetCorrectOptionByQuestionId(int questionId)
+        public Option? GetCorrectOptionByQuestionId(int questionId)
         {
             return _context.Options
                 .Where(o => o.QuestionId == questionId && o.IsCorrect == true)
                 .FirstOrDefault(o => o.QuestionId == questionId && o.IsCorrect == true);
         }
 
-        public Option GetOptionByOptionId(int optionId)
+        public Option? GetOptionByOptionId(int optionId)
         {
             return _context.Options
                 .FirstOrDefault(o => o.Id == optionId);

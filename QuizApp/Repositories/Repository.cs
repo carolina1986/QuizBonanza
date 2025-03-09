@@ -1,7 +1,6 @@
 // This class works as a middle man between the database and the rest of the application
 // so that the application does not have to interact with the database directly.
 // This is where the CRUD operations are implemented.
-
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Data;
@@ -24,7 +23,7 @@ namespace QuizApp.Repositories
         
         // The following methods are the implementation of the IRepository interface methods
         // This first method will return a single entity with the given id (e.g. a single user with the given id)
-        public T GetById(int id)
+        public T? GetById(int id)
         {
             return _dbSet.Find(id);
         }
@@ -38,7 +37,7 @@ namespace QuizApp.Repositories
         // This method will return all the entities that match the given expression (e.g. all users with a specific name, all users over 18 years old)
         // Expression<Func<T, bool>> is a lambda expression that takes an entity of type T and returns a boolean
         // (e.g. user => user.Name == "John" is a lambda expression that takes a user entity and returns true if the user's name is "John")
-        public IEnumerable<T> Find(Expression<Func<T, bool>> expression) //
+        public IQueryable<T> Find(Expression<Func<T, bool>> expression) //
         {
             return _dbSet.Where(expression);
         }
