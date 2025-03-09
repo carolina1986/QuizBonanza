@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using QuizApp.Models;
 using QuizApp.Data;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +10,7 @@ namespace QuizApp.Repositories
         {
         }
 
-        public Question GetQuestionWithOptions(int questionId)
+        public Question? GetQuestionWithOptions(int questionId)
         {
             return _context.Questions // This will return all the questions in the database
                 .Include(q => q.Options) // This will include the options for each question
@@ -24,7 +21,8 @@ namespace QuizApp.Repositories
         {
             return _context.Questions
                 .Where(q => q.QuizId == quizId) // This will return all the questions with the given quiz id
-                .ToList(); // This will return the questions as a list (SQL JOIN)
+                .Include(q => q.Options)
+                .ToList(); 
         }
 
         public IEnumerable<Question> GetQuestionsWithOptionsByQuizId(int quizId)
