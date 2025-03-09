@@ -1,7 +1,6 @@
 // When running the application this code takes care of all the database operations
 // It sets up the tables in the database and configures the relationships between the tables
 // It also configures the connection to the database
-
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Models;
 
@@ -24,6 +23,12 @@ namespace QuizApp.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                Console.WriteLine("DEBUG: Not usin enviroment variable");
+                connectionString = "Host=localhost;Port=5432;Database=quizDb;Username=admin;Password=password";  // Standardanslutning
+            }
+            
             optionsBuilder.UseNpgsql(connectionString);
         }
 
