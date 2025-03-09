@@ -15,5 +15,6 @@ Migrations/
 
 .env
 secrets.json
+appsettings.json
 
 docker-compose.override.yml
