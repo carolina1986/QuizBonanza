@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using QuizApp.Models;
 using QuizApp.Data;
@@ -15,19 +12,19 @@ namespace QuizApp.Repositories
 
         public Score SaveHighScoreToLeaderboard(int userId, int quizId, int points)
         {
-            var existingHighScore = _context.Scores // This will get all the scores from the database
-                .Where(s => s.UserId == userId && s.QuizId == quizId) // This will filter the scores to only the ones that have the same userId and quizId as the ones passed in
-                .OrderByDescending(s => s.Points) // This will oder the scores in descending order
-                .FirstOrDefault(); // We dont need to give this method a parameter since first in the list will be the highest score       
+            var existingHighScore = _context.Scores
+                .Where(s => s.UserId == userId && s.QuizId == quizId)
+                .OrderByDescending(s => s.Points)
+                .FirstOrDefault();
 
             if (existingHighScore == null || existingHighScore.Points < points)
             {
                 var newHighScore = new Score
                 {
                     UserId = userId,
-                    QuizId = quizId,
+                    QuizId = quizId, // Se till att rätt quiz-ID sätts
                     Points = points,
-                    PlayedAt = DateTime.Now
+                    PlayedAt = DateTime.UtcNow
                 };
 
                 _context.Scores.Add(newHighScore);
@@ -55,6 +52,7 @@ namespace QuizApp.Repositories
             return newScore;
         }
 
+
         public IEnumerable<Score> GetLeaderboardForAllQuizzes()
         {
             return _context.Scores
@@ -66,12 +64,14 @@ namespace QuizApp.Repositories
 
         public IEnumerable<Score> GetLeaderboardForQuiz(int quizId)
         {
-            return _context.Scores
-                .Include(s => s.User)
-                .Include(s => s.Quiz)
+            var scores = _context.Scores
                 .Where(s => s.QuizId == quizId)
+                .Include(s => s.User) 
+                //.Include(s => s.Quiz)
                 .OrderByDescending(s => s.Points)
                 .ToList();
+
+            return scores;
         }
 
         public IEnumerable<Score> GetLeaderboardForUser(int userId)
@@ -93,7 +93,7 @@ namespace QuizApp.Repositories
                 .ToList();
         }
 
-        public Score GetScoreForUserInQuiz(int userId, int quizId)
+        public Score? GetScoreForUserInQuiz(int userId, int quizId)
         {
             return _context.Scores
                 .Include(s => s.User)
@@ -101,7 +101,7 @@ namespace QuizApp.Repositories
                 .FirstOrDefault(s => s.UserId == userId && s.QuizId == quizId);
         }
 
-        public Score GetHighestScoreForUserInQuiz(int userId, int quizId)
+        public Score? GetHighestScoreForUserInQuiz(int userId, int quizId)
         {
             return _context.Scores
                 .Include(s => s.User)
