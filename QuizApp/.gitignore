@@ -8,11 +8,6 @@ obj/
 node_modules/
 packages/
 
-Migrations/
-*.mdf
-*.ldf
-*.db
-
 .env
 secrets.json
 appsettings.json
